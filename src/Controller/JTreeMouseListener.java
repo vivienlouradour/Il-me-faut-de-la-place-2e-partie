@@ -1,6 +1,6 @@
 package Controller;
 
-import View.LabelsInfo;
+import Model.LabelsInfo;
 import acdc.TreeDataModel.File1;
 
 import javax.swing.*;
@@ -8,7 +8,6 @@ import javax.swing.tree.TreePath;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class JTreeMouseListener implements MouseListener{
     private JTree jTree;

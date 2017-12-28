@@ -4,6 +4,7 @@ import Model.AppModel;
 import Model.Notifications;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -23,7 +24,7 @@ public class JTreeController implements ActionListener, Observer {
     public void actionPerformed(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int result = fileChooser.showOpenDialog((JMenuItem)e.getSource());
+        int result = fileChooser.showOpenDialog((Component)e.getSource());
 
         if(result == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();

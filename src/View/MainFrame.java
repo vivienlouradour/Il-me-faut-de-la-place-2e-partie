@@ -1,10 +1,8 @@
 package View;
 
-import Controller.DuplicatesController;
-import Controller.JTreeController;
-import Controller.JTreeMouseListener;
-import Controller.SettingsController;
+import Controller.*;
 import Model.AppModel;
+import Model.LabelsInfo;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -14,24 +12,54 @@ import java.awt.event.*;
 public class MainFrame extends JFrame {
     private JTree jTree;
     private JPanel jPanelGauche;
-    private GridBagConstraints gridBagConstraints;
     private LabelsInfo labelsInfo;
+    private JPanel jPanelPrincipal;
+    private JPanel jPanelBas;
 
 
     public MainFrame(){
         super("Il me faut de la place");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.getContentPane().setLayout(new GridLayout(1,2));
-        this.gridBagConstraints = new GridBagConstraints();
+        this.getContentPane().setLayout(new BorderLayout());
 
         //Init
         this.labelsInfo = new LabelsInfo();
+        this.jPanelPrincipal = new JPanel(new GridLayout(1,2));
+        this.jPanelBas = new JPanel();
+        this.jPanelBas.setLayout(new BoxLayout(this.jPanelBas, BoxLayout.X_AXIS));
 
         this.creerPanneauGauche();
         this.creerPanneauDroite();
         this.creerMenu();
+        this.creerPanneauBas();
+
+        this.getContentPane().add(this.jPanelPrincipal, BorderLayout.CENTER);
+        this.getContentPane().add(this.jPanelBas, BorderLayout.SOUTH);
 
         this.pack();
+    }
+
+    private void creerPanneauBas() {
+        JButton buttonScan = new JButton("Scan répertoire");
+        JTreeController jTreeController = new JTreeController(this.jTree, this.jPanelGauche);
+        buttonScan.addActionListener(jTreeController);
+
+        JButton buttonFilter = new JButton("Filtres");
+        FilterController filterController = new FilterController();
+        buttonFilter.addActionListener(filterController);
+
+        JButton buttonDuplicates = new JButton("Doublons");
+        DuplicatesController duplicatesController = new DuplicatesController();
+        buttonDuplicates.addActionListener(duplicatesController);
+
+        JButton buttonSettings = new JButton("Paramètres");
+        SettingsController settingsController = new SettingsController();
+        buttonSettings.addActionListener(settingsController);
+
+        this.jPanelBas.add(buttonScan);
+        this.jPanelBas.add(buttonFilter);
+        this.jPanelBas.add(buttonDuplicates);
+        this.jPanelBas.add(buttonSettings);
     }
 
     private void creerPanneauDroite() {
@@ -49,7 +77,7 @@ public class MainFrame extends JFrame {
         jPanelDroite.add(this.labelsInfo.jLabelIsDirectory);
         jPanelDroite.add(this.labelsInfo.jLabelLastModification);
         JScrollPane jScrollPane = new JScrollPane(jPanelDroite);
-        this.add(jScrollPane);
+        this.jPanelPrincipal.add(jScrollPane);
     }
 
     void creerPanneauGauche(){
@@ -62,7 +90,7 @@ public class MainFrame extends JFrame {
         this.jTree.setModel(null);
         JScrollPane treeView = new JScrollPane(this.jTree);
         jPanelGauche.add(treeView, BorderLayout.CENTER);
-        this.getContentPane().add(jPanelGauche);
+        this.jPanelPrincipal.add(jPanelGauche);
     }
 
     void creerMenu() {
@@ -81,6 +109,11 @@ public class MainFrame extends JFrame {
         mfile.add(searchDuplicatesMenuItem);
         DuplicatesController duplicatesController = new DuplicatesController();
         searchDuplicatesMenuItem.addActionListener(duplicatesController);
+
+        JMenuItem filterMenuItem = new JMenuItem("Filtres");
+        mfile.add(filterMenuItem);
+        FilterController filterController = new FilterController();
+        filterMenuItem.addActionListener(filterController);
 
         JMenuItem settingsMenuItem = new JMenuItem("Paramètres");
         mfile.add(settingsMenuItem);
