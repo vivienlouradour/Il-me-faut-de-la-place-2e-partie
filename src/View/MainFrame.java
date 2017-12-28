@@ -14,7 +14,6 @@ import java.awt.event.*;
 public class MainFrame extends JFrame {
     private JTree jTree;
     private JPanel jPanelGauche;
-    private JPanel jPanelDroite;
     private GridBagConstraints gridBagConstraints;
     private LabelsInfo labelsInfo;
 
@@ -22,7 +21,6 @@ public class MainFrame extends JFrame {
     public MainFrame(){
         super("Il me faut de la place");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//        this.getContentPane().setLayout(new GridBagLayout());
         this.getContentPane().setLayout(new GridLayout(1,2));
         this.gridBagConstraints = new GridBagConstraints();
 
@@ -37,9 +35,9 @@ public class MainFrame extends JFrame {
     }
 
     private void creerPanneauDroite() {
-        this.jPanelDroite = new JPanel();
-        this.jPanelDroite.setLayout(new BoxLayout(this.jPanelDroite, BoxLayout.Y_AXIS));
-        jPanelDroite.setPreferredSize(new Dimension(400,80));
+        JPanel jPanelDroite = new JPanel();
+        jPanelDroite.setLayout(new BoxLayout(jPanelDroite, BoxLayout.Y_AXIS));
+        //jPanelDroite.setPreferredSize(new Dimension(400,80));
         TitledBorder titledBorder = BorderFactory.createTitledBorder("Détails du fichier sélectionné");
         titledBorder.setTitleJustification(TitledBorder.CENTER);
         jPanelDroite.setBorder(titledBorder);
@@ -50,8 +48,8 @@ public class MainFrame extends JFrame {
         jPanelDroite.add(this.labelsInfo.jLabelSize);
         jPanelDroite.add(this.labelsInfo.jLabelIsDirectory);
         jPanelDroite.add(this.labelsInfo.jLabelLastModification);
-
-        this.add(jPanelDroite);
+        JScrollPane jScrollPane = new JScrollPane(jPanelDroite);
+        this.add(jScrollPane);
     }
 
     void creerPanneauGauche(){

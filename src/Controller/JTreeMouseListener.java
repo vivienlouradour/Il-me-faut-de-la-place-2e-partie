@@ -7,14 +7,18 @@ import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class JTreeMouseListener implements MouseListener{
     private JTree jTree;
     private LabelsInfo labelsInfo;
+    private SimpleDateFormat dateFormat;
 
     public JTreeMouseListener(JTree jTree, LabelsInfo labelsInfo){
         this.jTree = jTree;
         this.labelsInfo = labelsInfo;
+        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }
 
     @Override
@@ -29,7 +33,7 @@ public class JTreeMouseListener implements MouseListener{
                         this.labelsInfo.jLabelNom.setText("Nom : " + selectedNode.filename);
                         this.labelsInfo.jLabelAbsolutePath.setText("Chemin complet : " + selectedNode.absolutePath);
                         this.labelsInfo.jLabelSize.setText("Taille : " + selectedNode.weight/1000000.0 + " Mo");
-                        this.labelsInfo.jLabelLastModification.setText("Dernière modification : " + selectedNode.lastModifiedTime);
+                        this.labelsInfo.jLabelLastModification.setText("Dernière modification : " + dateFormat.format(selectedNode.lastModifiedTime.toMillis()));
                     }
                 }
     }
