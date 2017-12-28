@@ -7,7 +7,6 @@ import Controller.SettingsController;
 import Model.AppModel;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
@@ -16,20 +15,22 @@ public class MainFrame extends JFrame {
     private JTree jTree;
     private JPanel jPanelGauche;
     private JPanel jPanelDroite;
-
+    private GridBagConstraints gridBagConstraints;
     private LabelsInfo labelsInfo;
 
 
     public MainFrame(){
         super("Il me faut de la place");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.getContentPane().setLayout(new BorderLayout());
+//        this.getContentPane().setLayout(new GridBagLayout());
+        this.getContentPane().setLayout(new GridLayout(1,2));
+        this.gridBagConstraints = new GridBagConstraints();
 
         //Init
         this.labelsInfo = new LabelsInfo();
 
-        this.creerPanneauDroite();
         this.creerPanneauGauche();
+        this.creerPanneauDroite();
         this.creerMenu();
 
         this.pack();
@@ -50,20 +51,20 @@ public class MainFrame extends JFrame {
         jPanelDroite.add(this.labelsInfo.jLabelIsDirectory);
         jPanelDroite.add(this.labelsInfo.jLabelLastModification);
 
-        this.add(jPanelDroite, BorderLayout.EAST);
+        this.add(jPanelDroite);
     }
 
     void creerPanneauGauche(){
         this.jPanelGauche = new JPanel();
-        this.jPanelGauche.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        this.jPanelGauche.setLayout(new BorderLayout());
         this.jTree = new JTree();
-        JTreeMouseListener jTreeMouseListener = new JTreeMouseListener(this.jTree, this.labelsInfo, this.jPanelDroite);
+        JTreeMouseListener jTreeMouseListener = new JTreeMouseListener(this.jTree, this.labelsInfo);
         this.jTree.addMouseListener(jTreeMouseListener);
 
         this.jTree.setModel(null);
         JScrollPane treeView = new JScrollPane(this.jTree);
-        jPanelGauche.add(treeView);
-        this.getContentPane().add(jPanelGauche, BorderLayout.WEST);
+        jPanelGauche.add(treeView, BorderLayout.CENTER);
+        this.getContentPane().add(jPanelGauche);
     }
 
     void creerMenu() {

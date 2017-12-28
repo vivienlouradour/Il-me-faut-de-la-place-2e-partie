@@ -11,12 +11,10 @@ import java.awt.event.MouseListener;
 public class JTreeMouseListener implements MouseListener{
     private JTree jTree;
     private LabelsInfo labelsInfo;
-    private JPanel jPanelDroite;
 
-    public JTreeMouseListener(JTree jTree, LabelsInfo labelsInfo, JPanel jPanelDroite){
+    public JTreeMouseListener(JTree jTree, LabelsInfo labelsInfo){
         this.jTree = jTree;
         this.labelsInfo = labelsInfo;
-        this.jPanelDroite = jPanelDroite;
     }
 
     @Override
@@ -32,7 +30,6 @@ public class JTreeMouseListener implements MouseListener{
                         this.labelsInfo.jLabelAbsolutePath.setText("Chemin complet : " + selectedNode.absolutePath);
                         this.labelsInfo.jLabelSize.setText("Taille : " + selectedNode.weight/1000000.0 + " Mo");
                         this.labelsInfo.jLabelLastModification.setText("Dernière modification : " + selectedNode.lastModifiedTime);
-                        this.jPanelDroite.revalidate();
                     }
                 }
     }
