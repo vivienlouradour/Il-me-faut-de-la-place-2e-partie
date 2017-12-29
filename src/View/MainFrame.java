@@ -5,6 +5,8 @@ import Model.AppModel;
 import Model.LabelsInfo;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
@@ -68,7 +70,7 @@ public class MainFrame extends JFrame {
         //jPanelDroite.setPreferredSize(new Dimension(400,80));
         TitledBorder titledBorder = BorderFactory.createTitledBorder("Détails du fichier sélectionné");
         titledBorder.setTitleJustification(TitledBorder.CENTER);
-        jPanelDroite.setBorder(titledBorder);
+        jPanelDroite.setBorder(new CompoundBorder(titledBorder, new EmptyBorder(10,10,10,10)));
         this.labelsInfo.jLabelNom.setText("Effectuez un scan d'un répertoire.");
 
         jPanelDroite.add(this.labelsInfo.jLabelNom);
@@ -90,6 +92,7 @@ public class MainFrame extends JFrame {
         this.jTree.setModel(null);
         JScrollPane treeView = new JScrollPane(this.jTree);
         jPanelGauche.add(treeView, BorderLayout.CENTER);
+        jPanelGauche.setBorder(new EmptyBorder(10,10,10,10));
         this.jPanelPrincipal.add(jPanelGauche);
     }
 

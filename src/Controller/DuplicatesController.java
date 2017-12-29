@@ -1,8 +1,10 @@
 package Controller;
 
 import Model.AppModel;
+import View.DuplicatesFrame;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -17,24 +19,11 @@ public class DuplicatesController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int result = fileChooser.showOpenDialog((JMenuItem)e.getSource());
+        int result = fileChooser.showOpenDialog((Component) e.getSource());
 
         if(result == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            AppModel appModel = AppModel.getInstance();
-            ConcurrentHashMap<String, ConcurrentLinkedQueue<File>> duplicates;
-            try {
-                duplicates = appModel.getFileTree().collectDuplicates(file.getAbsolutePath(), appModel.getFilter(), appModel.getParallelism());
-                for (ConcurrentLinkedQueue<File> files : duplicates.values()) {
-                    System.out.println("*************");
-                    for (File duplicate  : files) {
-                        System.out.println("duplicate = " + duplicate);
-                    }
-                }
-            }
-            catch (IOException ex){
-                System.err.println(ex.getMessage());
-            }
+            DuplicatesFrame duplicatesFrame = new DuplicatesFrame(file);
         }
     }
 }

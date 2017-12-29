@@ -5,6 +5,7 @@ import View.Components.JListExtension;
 import acdc.Core.Utils.Filter;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -50,13 +51,14 @@ public class FilterFrame extends JFrame {
         regexPanel.setMaximumSize(new Dimension(600,80));
         TitledBorder titledBorder = BorderFactory.createTitledBorder("Expression régulière");
         titledBorder.setTitleJustification(TitledBorder.CENTER);
-        regexPanel.setBorder(titledBorder);
+        regexPanel.setBorder(new CompoundBorder(titledBorder, new EmptyBorder(10,10,10,10)));
 
         JLabel label = new JLabel("Expression : ");
         regexPanel.add(label, BorderLayout.WEST);
         this.regexTxtField = new JTextField();
+        this.regexTxtField.setText(appFilter.getPattern());
         regexPanel.add(this.regexTxtField, BorderLayout.CENTER);
-//TODO controller of regexTxtField
+
         return regexPanel;
     }
 
@@ -66,7 +68,7 @@ public class FilterFrame extends JFrame {
 
         TitledBorder titledBorder = BorderFactory.createTitledBorder("Extensions autorisées");
         titledBorder.setTitleJustification(TitledBorder.CENTER);
-        this.acceptedExtensionsPanel.setBorder(titledBorder);
+        this.acceptedExtensionsPanel.setBorder(new CompoundBorder(titledBorder, new EmptyBorder(10,10,10,10)));
 
         return this.acceptedExtensionsPanel;
     }
@@ -77,7 +79,7 @@ public class FilterFrame extends JFrame {
 
         TitledBorder titledBorder = BorderFactory.createTitledBorder("Extensions refusées");
         titledBorder.setTitleJustification(TitledBorder.CENTER);
-        this.refusedExtensionsPanel.setBorder(titledBorder);
+        this.refusedExtensionsPanel.setBorder(new CompoundBorder(titledBorder, new EmptyBorder(10,10,10,10)));
 
         return refusedExtensionsPanel;
     }
@@ -89,11 +91,11 @@ public class FilterFrame extends JFrame {
 
         TitledBorder titledBorder = BorderFactory.createTitledBorder("Taille des fichiers");
         titledBorder.setTitleJustification(TitledBorder.CENTER);
-        weightJPanel.setBorder(titledBorder);
+        weightJPanel.setBorder(new CompoundBorder(titledBorder, new EmptyBorder(10,10,10,10)));
 
         String[] typeFiltrePoids = new String[] {"supérieur à", "inférieur à"};
         String[] unitePoidsPattern = new String[]{"o", "Ko", "Mo", "Go"};
-        SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(0, 0, Long.MAX_VALUE, 1L);
+        SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(0L, 0L, Long.MAX_VALUE, 1L);
 
         JLabel labelPoids = new JLabel("Taille (0 = désactivé) : ");
         this.spinnerPoids = new JSpinner(spinnerNumberModel);
@@ -132,7 +134,13 @@ public class FilterFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             // weight
-            long nbOctet = (long)((double) spinnerPoids.getValue());
+            long nbOctet;
+            try {
+                nbOctet = (long) ((double) spinnerPoids.getValue());
+            }
+            catch (ClassCastException ex){
+                nbOctet = (long)spinnerPoids.getValue();
+            }
             nbOctet *= getWeightFactor(unitePoids);
 
             if(nbOctet == 0)
@@ -149,6 +157,9 @@ public class FilterFrame extends JFrame {
 
             //Refused extensions
             appFilter.setRefusedExtensions(refusedExtensionsPanel.getExtensions());
+
+            //Regex
+            appFilter.setPattern(regexTxtField.getText());
 
             setVisible(false);
             dispose();
