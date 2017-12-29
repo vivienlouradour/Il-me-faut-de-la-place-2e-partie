@@ -1,25 +1,85 @@
 package View;
 
 import Model.AppModel;
+import View.Components.JListExtension;
 import acdc.Core.Utils.Filter;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class FilterFrame extends JFrame {
+    private Filter appFilter;
+    private int separatorHeight = 10;
+
     //Filtres sur poids
     private JComboBox<String> unitePoids;
     private JComboBox<String> typeFiltrePoids;
-    private JSpinner spinner;
+    private JSpinner spinnerPoids;
+
+    //Filtres sur Extentions
+    private JListExtension acceptedExtensionsPanel;
+    private JListExtension refusedExtensionsPanel;
+
+    //Filtre sur regex
+    private JTextField regexTxtField;
 
     public FilterFrame(){
         super("Gestion des filtres");
         this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
+
+        this.appFilter = AppModel.getInstance().getFilter();
+        this.add(Box.createVerticalStrut(this.separatorHeight));
         this.add(createWeightPanel());
+        this.add(Box.createVerticalStrut(this.separatorHeight));
+        this.add(createAcceptedExtension());
+        this.add(Box.createVerticalStrut(this.separatorHeight));
+        this.add(createRefusedExtension());
+        this.add(Box.createVerticalStrut(this.separatorHeight));
+        this.add(createRegexPanel());
+        this.add(Box.createVerticalStrut(this.separatorHeight));
         this.add(createButtonsPanel());
+    }
+
+    private JPanel createRegexPanel() {
+        JPanel regexPanel = new JPanel(new BorderLayout());
+        regexPanel.setMaximumSize(new Dimension(600,80));
+        TitledBorder titledBorder = BorderFactory.createTitledBorder("Expression régulière");
+        titledBorder.setTitleJustification(TitledBorder.CENTER);
+        regexPanel.setBorder(titledBorder);
+
+        JLabel label = new JLabel("Expression : ");
+        regexPanel.add(label, BorderLayout.WEST);
+        this.regexTxtField = new JTextField();
+        regexPanel.add(this.regexTxtField, BorderLayout.CENTER);
+//TODO controller of regexTxtField
+        return regexPanel;
+    }
+
+    private JPanel createAcceptedExtension() {
+        this.acceptedExtensionsPanel = new JListExtension(appFilter.getAcceptedExtensions());
+        acceptedExtensionsPanel.setMaximumSize(new Dimension(600,80));
+
+        TitledBorder titledBorder = BorderFactory.createTitledBorder("Extensions autorisées");
+        titledBorder.setTitleJustification(TitledBorder.CENTER);
+        this.acceptedExtensionsPanel.setBorder(titledBorder);
+
+        return this.acceptedExtensionsPanel;
+    }
+
+    private JPanel createRefusedExtension() {
+        this.refusedExtensionsPanel = new JListExtension(appFilter.getRefusedExtensions());
+        this.refusedExtensionsPanel.setMaximumSize(new Dimension(600,80));
+
+        TitledBorder titledBorder = BorderFactory.createTitledBorder("Extensions refusées");
+        titledBorder.setTitleJustification(TitledBorder.CENTER);
+        this.refusedExtensionsPanel.setBorder(titledBorder);
+
+        return refusedExtensionsPanel;
     }
 
     private JPanel createWeightPanel(){
@@ -27,7 +87,7 @@ public class FilterFrame extends JFrame {
         weightJPanel.setMaximumSize(new Dimension(600,80));
         weightJPanel.setLayout(new GridLayout(1,4));
 
-        TitledBorder titledBorder = BorderFactory.createTitledBorder("Filtre sur la taille des fichiers");
+        TitledBorder titledBorder = BorderFactory.createTitledBorder("Taille des fichiers");
         titledBorder.setTitleJustification(TitledBorder.CENTER);
         weightJPanel.setBorder(titledBorder);
 
@@ -36,15 +96,16 @@ public class FilterFrame extends JFrame {
         SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(0, 0, Long.MAX_VALUE, 1L);
 
         JLabel labelPoids = new JLabel("Taille (0 = désactivé) : ");
-        this.spinner = new JSpinner(spinnerNumberModel);
+        this.spinnerPoids = new JSpinner(spinnerNumberModel);
         this.typeFiltrePoids = new JComboBox<>(typeFiltrePoids);
         this.unitePoids = new JComboBox<>(unitePoidsPattern);
+        if(appFilter.getWeight() != null)
+            this.spinnerPoids.setValue(appFilter.getWeight());
 
         weightJPanel.add(labelPoids);
         weightJPanel.add(this.typeFiltrePoids);
-        weightJPanel.add(spinner);
+        weightJPanel.add(spinnerPoids);
         weightJPanel.add(unitePoids);
-
 
         return weightJPanel;
     }
@@ -53,6 +114,13 @@ public class FilterFrame extends JFrame {
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         JButton cancelButton = new JButton("Annuler");
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                dispose();
+            }
+        });
         JButton acceptButton = new JButton("Ok");
         acceptButton.addActionListener(new AcceptButtonControl());
         buttonsPanel.add(acceptButton);
@@ -61,19 +129,26 @@ public class FilterFrame extends JFrame {
     }
 
     private class AcceptButtonControl implements ActionListener{
-
         @Override
         public void actionPerformed(ActionEvent e) {
-            Filter appFilter = AppModel.getInstance().getFilter();
-
-            long nbOctet = (long)((double) spinner.getValue());
+            // weight
+            long nbOctet = (long)((double) spinnerPoids.getValue());
             nbOctet *= getWeightFactor(unitePoids);
 
+            if(nbOctet == 0)
+                appFilter.setWeight(null);
 
             if(typeFiltrePoids.getSelectedItem().equals("supérieur à"))
                 appFilter.GtWeight(nbOctet);
             else
                 appFilter.LwWeight(nbOctet);
+
+            //Accepted extensions
+            ArrayList<String> acceptedExtensions = acceptedExtensionsPanel.getExtensions();
+            appFilter.setAcceptedExtensions(acceptedExtensions);
+
+            //Refused extensions
+            appFilter.setRefusedExtensions(refusedExtensionsPanel.getExtensions());
 
             setVisible(false);
             dispose();
@@ -94,5 +169,4 @@ public class FilterFrame extends JFrame {
             }
         }
     }
-
 }

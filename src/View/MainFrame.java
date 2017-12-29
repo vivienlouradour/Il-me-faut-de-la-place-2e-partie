@@ -45,8 +45,8 @@ public class MainFrame extends JFrame {
         buttonScan.addActionListener(jTreeController);
 
         JButton buttonFilter = new JButton("Filtres");
-        FilterController filterController = new FilterController();
-        buttonFilter.addActionListener(filterController);
+        ShowFilterController showFilterController = new ShowFilterController();
+        buttonFilter.addActionListener(showFilterController);
 
         JButton buttonDuplicates = new JButton("Doublons");
         DuplicatesController duplicatesController = new DuplicatesController();
@@ -112,8 +112,8 @@ public class MainFrame extends JFrame {
 
         JMenuItem filterMenuItem = new JMenuItem("Filtres");
         mfile.add(filterMenuItem);
-        FilterController filterController = new FilterController();
-        filterMenuItem.addActionListener(filterController);
+        ShowFilterController showFilterController = new ShowFilterController();
+        filterMenuItem.addActionListener(showFilterController);
 
         JMenuItem settingsMenuItem = new JMenuItem("Paramètres");
         mfile.add(settingsMenuItem);
