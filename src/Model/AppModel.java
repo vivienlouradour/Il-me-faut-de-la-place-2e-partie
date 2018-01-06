@@ -2,6 +2,8 @@ package Model;
 
 import acdc.Core.FileTree;
 import acdc.Core.Utils.Filter;
+import acdc.TreeDataModel.File1;
+
 import javax.swing.tree.TreeModel;
 import java.util.Observable;
 
@@ -11,6 +13,7 @@ public class AppModel extends Observable{
     private TreeModel treeModel;
     private Filter filter;
     private int parallelism;
+    private File1 selectedFile;
 
     private AppModel(){
         this.fileTree = FileTree.creerFileTree();
@@ -29,6 +32,16 @@ public class AppModel extends Observable{
         System.out.println("AppModel.setTree(" + rootPath + ")");
         this.setChanged();
         this.notifyObservers(Notifications.TreeModelChange);
+    }
+
+    public File1 getSelectedFile() {
+        return selectedFile;
+    }
+
+    public void setSelectedFile(File1 selectedNode){
+        this.selectedFile = selectedNode;
+        this.setChanged();
+        this.notifyObservers(Notifications.SelectedFileChange);
     }
 
     public FileTree getFileTree() {

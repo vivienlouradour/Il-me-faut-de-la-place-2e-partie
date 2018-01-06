@@ -2,6 +2,7 @@ package Controller;
 
 import Model.AppModel;
 import Model.Notifications;
+import acdc.TreeDataModel.File1;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,6 +44,7 @@ public class JTreeController implements ActionListener, Observer {
         if(notif == Notifications.TreeModelChange){
             this.jTree.setModel(AppModel.getInstance().getTree());
             this.jPanel.revalidate();
+            AppModel.getInstance().setSelectedFile((File1)this.jTree.getModel().getRoot());
         }
     }
 }

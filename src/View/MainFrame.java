@@ -2,21 +2,22 @@ package View;
 
 import Controller.*;
 import Model.AppModel;
-import Model.LabelsInfo;
 
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 
 public class MainFrame extends JFrame {
     private JTree jTree;
     private JPanel jPanelGauche;
-    private LabelsInfo labelsInfo;
+    private JPanel jPanelDroite;
     private JPanel jPanelPrincipal;
     private JPanel jPanelBas;
+    private JTable jTable;
+    private JSplitPane jSplitPanePrincipal;
 
 
     public MainFrame(){
@@ -25,13 +26,22 @@ public class MainFrame extends JFrame {
         this.getContentPane().setLayout(new BorderLayout());
 
         //Init
-        this.labelsInfo = new LabelsInfo();
         this.jPanelPrincipal = new JPanel(new GridLayout(1,2));
         this.jPanelBas = new JPanel();
         this.jPanelBas.setLayout(new BoxLayout(this.jPanelBas, BoxLayout.X_AXIS));
-
+        String[] entetes = {"Type", "Nom", "Chemin absolu", "Taille", "Dernière modification"};
+        DefaultTableModel tableModel = new DefaultTableModel(null, entetes);
+        this.jTable = new JTable(tableModel);
+        this.jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         this.creerPanneauGauche();
         this.creerPanneauDroite();
+        SelectedFileObserver selectedFileObserver = new SelectedFileObserver(this.jTable);
+        AppModel.getInstance().addObserver(selectedFileObserver);
+        this.jPanelDroite.setBorder(new LineBorder(Color.BLACK, 10));
+        this.jSplitPanePrincipal = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this.jPanelGauche, this.jPanelDroite);
+        this.jSplitPanePrincipal.setOneTouchExpandable(true);
+        this.jSplitPanePrincipal.setResizeWeight(0.5);
+        this.jPanelPrincipal.add(jSplitPanePrincipal);
         this.creerMenu();
         this.creerPanneauBas();
 
@@ -64,36 +74,29 @@ public class MainFrame extends JFrame {
         this.jPanelBas.add(buttonSettings);
     }
 
-    private void creerPanneauDroite() {
-        JPanel jPanelDroite = new JPanel();
-        jPanelDroite.setLayout(new BoxLayout(jPanelDroite, BoxLayout.Y_AXIS));
-        //jPanelDroite.setPreferredSize(new Dimension(400,80));
-        TitledBorder titledBorder = BorderFactory.createTitledBorder("Détails du fichier sélectionné");
-        titledBorder.setTitleJustification(TitledBorder.CENTER);
-        jPanelDroite.setBorder(new CompoundBorder(titledBorder, new EmptyBorder(10,10,10,10)));
-        this.labelsInfo.jLabelNom.setText("Effectuez un scan d'un répertoire.");
 
-        jPanelDroite.add(this.labelsInfo.jLabelNom);
-        jPanelDroite.add(this.labelsInfo.jLabelAbsolutePath);
-        jPanelDroite.add(this.labelsInfo.jLabelSize);
-        jPanelDroite.add(this.labelsInfo.jLabelIsDirectory);
-        jPanelDroite.add(this.labelsInfo.jLabelLastModification);
-        JScrollPane jScrollPane = new JScrollPane(jPanelDroite);
-        this.jPanelPrincipal.add(jScrollPane);
+    private void creerPanneauDroite() {
+        JScrollPane jScrollPane = new JScrollPane(this.jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this.jPanelDroite = new JPanel();
+        this.jPanelDroite.setLayout(new BorderLayout());
+        jPanelDroite.add(jScrollPane, BorderLayout.CENTER);
+        //this.jPanelPrincipal.add(jScrollPane);
+        //this.jSplitPanePrincipal.add(jScrollPane);
     }
+
 
     void creerPanneauGauche(){
         this.jPanelGauche = new JPanel();
         this.jPanelGauche.setLayout(new BorderLayout());
         this.jTree = new JTree();
-        JTreeMouseListener jTreeMouseListener = new JTreeMouseListener(this.jTree, this.labelsInfo);
+        JTreeMouseListener jTreeMouseListener = new JTreeMouseListener(this.jTree);
         this.jTree.addMouseListener(jTreeMouseListener);
 
         this.jTree.setModel(null);
         JScrollPane treeView = new JScrollPane(this.jTree);
         jPanelGauche.add(treeView, BorderLayout.CENTER);
         jPanelGauche.setBorder(new EmptyBorder(10,10,10,10));
-        this.jPanelPrincipal.add(jPanelGauche);
+        //this.jPanelPrincipal.add(jPanelGauche);
     }
 
     void creerMenu() {
