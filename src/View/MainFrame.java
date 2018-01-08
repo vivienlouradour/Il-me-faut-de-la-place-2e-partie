@@ -2,6 +2,7 @@ package View;
 
 import Controller.*;
 import Model.AppModel;
+import View.Components.JFileTable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -16,7 +17,7 @@ public class MainFrame extends JFrame {
     private JPanel jPanelDroite;
     private JPanel jPanelPrincipal;
     private JPanel jPanelBas;
-    private JTable jTable;
+    private JFileTable jTable;
     private JSplitPane jSplitPanePrincipal;
 
 
@@ -29,22 +30,19 @@ public class MainFrame extends JFrame {
         this.jPanelPrincipal = new JPanel(new GridLayout(1,2));
         this.jPanelBas = new JPanel();
         this.jPanelBas.setLayout(new BoxLayout(this.jPanelBas, BoxLayout.X_AXIS));
-        String[] entetes = {"Type", "Nom", "Chemin absolu", "Taille", "Dernière modification"};
-        DefaultTableModel tableModel = new DefaultTableModel(null, entetes);
-        this.jTable = new JTable(tableModel);
+
+        this.jTable = new JFileTable();
         this.jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         this.creerPanneauGauche();
         this.creerPanneauDroite();
         SelectedFileObserver selectedFileObserver = new SelectedFileObserver(this.jTable);
         AppModel.getInstance().addObserver(selectedFileObserver);
-        this.jPanelDroite.setBorder(new LineBorder(Color.BLACK, 10));
         this.jSplitPanePrincipal = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this.jPanelGauche, this.jPanelDroite);
         this.jSplitPanePrincipal.setOneTouchExpandable(true);
         this.jSplitPanePrincipal.setResizeWeight(0.5);
         this.jPanelPrincipal.add(jSplitPanePrincipal);
         this.creerMenu();
         this.creerPanneauBas();
-
         this.getContentPane().add(this.jPanelPrincipal, BorderLayout.CENTER);
         this.getContentPane().add(this.jPanelBas, BorderLayout.SOUTH);
 
