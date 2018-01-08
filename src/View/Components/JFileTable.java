@@ -1,7 +1,7 @@
 package View.Components;
 
 
-import acdc.TreeDataModel.File1;
+import Controller.JTableMouseController;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -9,6 +9,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,8 +25,37 @@ public class JFileTable extends JTable {
         ArrayList<Object[]> data = new ArrayList<>();
 
         this.changeData(data);
-        //this.setEnabled(true);
+        this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        JPopupMenu popup = new JPopupMenu();
+        JMenuItem menuItemCopy = new JMenuItem("Copier la valeur");
+        JMenuItem menuItemDelete = new JMenuItem("Supprimer le fichier");
+        menuItemDelete.addActionListener( new JTableMouseController());
+        menuItemCopy.addActionListener(new JTableMouseController());
+        popup.add(menuItemDelete);
+        popup.add(menuItemCopy);
+        this.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e)
+            {
+                System.out.println("pressed");
+            }
+
+            public void mouseReleased(MouseEvent e)
+            {
+                if (e.isPopupTrigger())
+                {
+                    JTable source = (JTable)e.getSource();
+                    int row = source.rowAtPoint( e.getPoint() );
+                    int column = source.columnAtPoint( e.getPoint() );
+
+                    if (! source.isRowSelected(row))
+                        source.changeSelection(row, column, false, false);
+
+                    popup.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        });
     }
 
     public static Object[] getLine(File file, long size){
@@ -82,32 +113,20 @@ public class JFileTable extends JTable {
                         hasFocus, row, column);
             }
         };
-
         this.setAutoCreateRowSorter(true);
         this.setModel(tableModel);
-        if(!data.isEmpty()) {
+        if(data.size() > 0)
             this.getColumnModel().getColumn(4).setCellRenderer(tableCellRenderer);
-//            this.tweakColumns(this);
-        }
-        this.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);// AUTO_RESIZE_ALL_COLUMNS);
-        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
-    private void tweakColumns(JTable table){
-        Enumeration<TableColumn> columns = table.getColumnModel().getColumns();
 
-        int required = 0;
-        while(columns.hasMoreElements()){
-            TableColumn column = columns.nextElement();
-            int width = (int)table.getTableHeader().getDefaultRenderer()
-                    .getTableCellRendererComponent(table, column.getIdentifier()
-                            , false, false, -1, column.getModelIndex()).getPreferredSize().getWidth();
-            required += width;
-        }
 
-        JViewport viewport = (JViewport)SwingUtilities.getAncestorOfClass(JViewport.class, table);
-        int viewportWidth = viewport.getWidth();
-        table.setAutoResizeMode(required<viewportWidth ? JTable.AUTO_RESIZE_ALL_COLUMNS : JTable.AUTO_RESIZE_OFF);
+
+
+
+    @Override
+    public boolean getScrollableTracksViewportWidth() {
+        return getPreferredSize().width < getParent().getWidth();
     }
 
 

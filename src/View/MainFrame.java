@@ -28,11 +28,10 @@ public class MainFrame extends JFrame {
 
         //Init
         this.jPanelPrincipal = new JPanel(new GridLayout(1,2));
-        this.jPanelBas = new JPanel();
-        this.jPanelBas.setLayout(new BoxLayout(this.jPanelBas, BoxLayout.X_AXIS));
+        this.jPanelBas = new JPanel(new BorderLayout());
+        //this.jPanelBas.setLayout(new BoxLayout(this.jPanelBas, BoxLayout.X_AXIS));
 
         this.jTable = new JFileTable();
-        this.jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         this.creerPanneauGauche();
         this.creerPanneauDroite();
         SelectedFileObserver selectedFileObserver = new SelectedFileObserver(this.jTable);
@@ -50,6 +49,9 @@ public class MainFrame extends JFrame {
     }
 
     private void creerPanneauBas() {
+        JPanel panelBtnGauche = new JPanel();
+        panelBtnGauche.setLayout(new BoxLayout(panelBtnGauche, BoxLayout.X_AXIS));
+
         JButton buttonScan = new JButton("Scan répertoire");
         JTreeController jTreeController = new JTreeController(this.jTree, this.jPanelGauche);
         buttonScan.addActionListener(jTreeController);
@@ -66,15 +68,29 @@ public class MainFrame extends JFrame {
         SettingsController settingsController = new SettingsController();
         buttonSettings.addActionListener(settingsController);
 
-        this.jPanelBas.add(buttonScan);
-        this.jPanelBas.add(buttonFilter);
-        this.jPanelBas.add(buttonDuplicates);
-        this.jPanelBas.add(buttonSettings);
+        panelBtnGauche.add(buttonScan);
+        panelBtnGauche.add(buttonFilter);
+        panelBtnGauche.add(buttonDuplicates);
+        panelBtnGauche.add(buttonSettings);
+
+
+        JPanel panelBtnDroit = new JPanel();
+        panelBtnDroit.setLayout(new BoxLayout(panelBtnDroit, BoxLayout.X_AXIS));
+
+        JButton buttonZoomIn = new JButton("+");
+        buttonZoomIn.addActionListener(new JTableZoomController(this.jTable, true));
+        JButton buttonZoomOut = new JButton("-");
+        buttonZoomOut.addActionListener(new JTableZoomController(this.jTable, false));
+        panelBtnDroit.add(buttonZoomIn);
+        panelBtnDroit.add(buttonZoomOut);
+
+        this.jPanelBas.add(panelBtnGauche, BorderLayout.WEST);
+        this.jPanelBas.add(panelBtnDroit, BorderLayout.EAST);
+
     }
 
 
     private void creerPanneauDroite() {
-        this.jTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         JScrollPane jScrollPane = new JScrollPane(this.jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.jPanelDroite = new JPanel();
         this.jPanelDroite.setLayout(new BorderLayout());
