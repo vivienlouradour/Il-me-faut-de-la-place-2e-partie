@@ -4,7 +4,6 @@ package View.Components;
 import acdc.TreeDataModel.File1;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -24,7 +23,8 @@ public class JFileTable extends JTable {
         ArrayList<Object[]> data = new ArrayList<>();
 
         this.changeData(data);
-        this.setEnabled(false);
+        //this.setEnabled(true);
+        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     public static Object[] getLine(File file, long size){
@@ -61,6 +61,11 @@ public class JFileTable extends JTable {
                     return String.class;
                 return getValueAt(0, column).getClass();
             }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
 
         TableCellRenderer tableCellRenderer = new DefaultTableCellRenderer() {
@@ -79,13 +84,13 @@ public class JFileTable extends JTable {
         };
 
         this.setAutoCreateRowSorter(true);
-        this.setEnabled(false);
         this.setModel(tableModel);
         if(!data.isEmpty()) {
             this.getColumnModel().getColumn(4).setCellRenderer(tableCellRenderer);
 //            this.tweakColumns(this);
-            this.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);// AUTO_RESIZE_ALL_COLUMNS);
         }
+        this.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);// AUTO_RESIZE_ALL_COLUMNS);
+        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private void tweakColumns(JTable table){

@@ -74,6 +74,7 @@ public class MainFrame extends JFrame {
 
 
     private void creerPanneauDroite() {
+        this.jTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         JScrollPane jScrollPane = new JScrollPane(this.jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.jPanelDroite = new JPanel();
         this.jPanelDroite.setLayout(new BorderLayout());
