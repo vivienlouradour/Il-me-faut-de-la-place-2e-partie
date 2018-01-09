@@ -31,6 +31,7 @@ public class AppModel extends Observable{
     }
 
     public void setTree(String rootPath) {
+        long debut = System.currentTimeMillis();
         this.treeModel = this.fileTree.tree(rootPath, this.filter, this.parallelism);
         this.setChanged();
         this.notifyObservers(Notifications.TreeModelChange);
@@ -48,6 +49,10 @@ public class AppModel extends Observable{
 
     public FileTree getFileTree() {
         return fileTree;
+    }
+
+    public void setParallelism(boolean multiThread){
+        this.parallelism = multiThread ? 2 : 1;
     }
 
     public int getParallelism(){

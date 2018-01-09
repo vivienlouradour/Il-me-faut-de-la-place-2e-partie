@@ -30,7 +30,7 @@ public class FilterFrame extends JFrame {
     private JTextField regexTxtField;
 
     public FilterFrame(){
-        super("Gestion des filtres");
+        super("Il me faut de la place - Gestion des filtres");
         this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 
         this.appFilter = AppModel.getInstance().getFilter();

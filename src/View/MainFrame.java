@@ -64,6 +64,15 @@ public class MainFrame extends JFrame {
         DuplicatesController duplicatesController = new DuplicatesController();
         buttonDuplicates.addActionListener(duplicatesController);
 
+        JButton buttonSettings = new JButton("Paramètres");
+        buttonSettings.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SettingsFrame settingsFrame = new SettingsFrame();
+                settingsFrame.setVisible(true);
+            }
+        });
+
         JButton buttonErrors = new JButton("Log erreurs");
         buttonErrors.addActionListener(new ActionListener() {
             @Override
@@ -77,6 +86,7 @@ public class MainFrame extends JFrame {
         panelBtnGauche.add(buttonScan);
         panelBtnGauche.add(buttonFilter);
         panelBtnGauche.add(buttonDuplicates);
+        panelBtnGauche.add(buttonSettings);
         //panelBtnGauche.add(buttonErrors);
 
 
@@ -101,8 +111,6 @@ public class MainFrame extends JFrame {
         this.jPanelDroite = new JPanel();
         this.jPanelDroite.setLayout(new BorderLayout());
         jPanelDroite.add(jScrollPane, BorderLayout.CENTER);
-        //this.jPanelPrincipal.add(jScrollPane);
-        //this.jSplitPanePrincipal.add(jScrollPane);
     }
 
 
@@ -117,7 +125,6 @@ public class MainFrame extends JFrame {
         JScrollPane treeView = new JScrollPane(this.jTree);
         jPanelGauche.add(treeView, BorderLayout.CENTER);
         jPanelGauche.setBorder(new EmptyBorder(10,10,10,10));
-        //this.jPanelPrincipal.add(jPanelGauche);
     }
 
     void creerMenu() {
@@ -145,6 +152,17 @@ public class MainFrame extends JFrame {
         filterMenuItem.addActionListener(showFilterController);
 
         mfile.addSeparator();
+
+        JMenuItem settingsMenuItem = new JMenuItem("Paramètres");
+        mfile.add(settingsMenuItem);
+        settingsMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SettingsFrame settingsFrame = new SettingsFrame();
+                settingsFrame.setVisible(true);
+            }
+        });
+
         JMenuItem quitter = new JMenuItem("Quitter");
         mfile.add(quitter);
         quitter.addActionListener(new ActionListener() {
