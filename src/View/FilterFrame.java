@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class FilterFrame extends JFrame {
+    private static boolean firstTimeShow = true; //Utile pour afficher un message lors de la premiere ouverture
     private Filter appFilter;
     private int separatorHeight = 10;
 
@@ -165,8 +166,11 @@ public class FilterFrame extends JFrame {
             //Regex
             appFilter.setPattern(regexTxtField.getText());
 
-            String message = "les modifications apportées prendront effet à partir du prochain scan ou recherche de doublons.";
-            JOptionPane.showMessageDialog(getThis(), message);
+            if(firstTimeShow) {
+                String message = "les modifications apportées prendront effet à partir du prochain scan ou recherche de doublons.";
+                JOptionPane.showMessageDialog(getThis(), message);
+                firstTimeShow = false;
+            }
             setVisible(false);
             dispose();
         }

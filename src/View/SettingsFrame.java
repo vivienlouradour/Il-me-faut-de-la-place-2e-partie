@@ -17,7 +17,7 @@ public class SettingsFrame extends JFrame {
         super("Il me faut de la place - Paramètres");
         this.setSize(new Dimension(600,200));
         this.setResizable(false);
-
+        this.setLocationRelativeTo(null);
         this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 
         this.multiThreadEnabled = AppModel.getInstance().getParallelism() == 2;

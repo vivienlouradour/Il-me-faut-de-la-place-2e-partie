@@ -2,6 +2,7 @@ package View;
 
 import Model.AppModel;
 import View.Components.JFileTable;
+import acdc.Core.Utils.Filter;
 import acdc.Services.ErrorLogging;
 
 import javax.swing.*;
@@ -16,28 +17,36 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class DuplicatesFrame extends JFrame {
     private ConcurrentHashMap<String, ConcurrentLinkedQueue<File>> duplicates;
     private SimpleDateFormat dateFormat;
+    private boolean useFilters;
     /**
      *
      * @param file répertoire à partir duquel chercher les doublons
      */
-    public DuplicatesFrame(File file){
-        super("Il me faut de la place - Recherche de doublons");
+    public DuplicatesFrame(File file, boolean useFilters){
+        super("Il me faut de la place - Recherche de doublons en cours...");
         AppModel appModel = AppModel.getInstance();
+        this.useFilters = useFilters;
+        this.setMinimumSize(new Dimension(850,350));
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
         this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
-            duplicates = appModel.getFileTree().collectDuplicates(file.getAbsolutePath(), appModel.getFilter(), appModel.getParallelism());
+            duplicates = appModel.getFileTree().collectDuplicates(file.getAbsolutePath(), useFilters ? appModel.getFilter() : Filter.createFilter(), appModel.getParallelism());
+            this.setTitle("Il me faut de la place - Liste des doublons");
             this.getContentPane().add(new JScrollPane(createPanel()));
         }
         catch (IOException ex){
             ErrorLogging.getInstance().addLog("Erreur recherche doublons : " + ex.getMessage());
         }
-        this.setMinimumSize(new Dimension(850,350));
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
+
     }
 
     private JPanel createPanel(){
         JPanel jPanel = new JPanel();
+        if(duplicates.isEmpty()){
+            jPanel.add(new JLabel("Aucun doublon détecté dans le répertoire indiqué" + (this.useFilters ? ", avec les filtres sélectionnés." : ".")));
+            return jPanel;
+        }
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
         ArrayList<JFileTable> fileTables = new ArrayList<>();
 

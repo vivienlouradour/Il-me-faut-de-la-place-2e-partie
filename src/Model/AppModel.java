@@ -67,6 +67,7 @@ public class AppModel extends Observable{
         return this.filter;
     }
 
+
     public void deleteFile(Path path) throws IOException{
         Files.delete(path);
         this.setChanged();
