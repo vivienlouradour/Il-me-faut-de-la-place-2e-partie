@@ -1,5 +1,0 @@
-//TODO settings : cache file + parallelisme
-//TODO filtre : plus d'explications
-//TODO option suppression :
-    * Fix bug Doublons
-    * Peut etre revenir à la selection d'avant

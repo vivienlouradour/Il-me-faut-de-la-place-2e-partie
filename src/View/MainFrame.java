@@ -10,6 +10,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URI;
 
 public class MainFrame extends JFrame {
     private JTree jTree;
@@ -64,14 +65,20 @@ public class MainFrame extends JFrame {
         DuplicatesController duplicatesController = new DuplicatesController();
         buttonDuplicates.addActionListener(duplicatesController);
 
-        JButton buttonSettings = new JButton("Paramètres");
-        SettingsController settingsController = new SettingsController();
-        buttonSettings.addActionListener(settingsController);
+        JButton buttonErrors = new JButton("Log erreurs");
+        buttonErrors.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ErrorsFrame errorsFrame = new ErrorsFrame();
+                errorsFrame.setVisible(true);
+            }
+        });
+
 
         panelBtnGauche.add(buttonScan);
         panelBtnGauche.add(buttonFilter);
         panelBtnGauche.add(buttonDuplicates);
-        panelBtnGauche.add(buttonSettings);
+        //panelBtnGauche.add(buttonErrors);
 
 
         JPanel panelBtnDroit = new JPanel();
@@ -118,7 +125,9 @@ public class MainFrame extends JFrame {
         JMenuBar jmb = new JMenuBar();
         this.setJMenuBar(jmb);
         JMenu mfile = new JMenu("Fichier");
+        JMenu mHelp = new JMenu("Aide");
         jmb.add(mfile);
+        jmb.add(mHelp);
 
         JMenuItem scanTreeMenuItem = new JMenuItem("Scanner un répertoire");
         mfile.add(scanTreeMenuItem);
@@ -136,17 +145,27 @@ public class MainFrame extends JFrame {
         ShowFilterController showFilterController = new ShowFilterController();
         filterMenuItem.addActionListener(showFilterController);
 
-        JMenuItem settingsMenuItem = new JMenuItem("Paramètres");
-        mfile.add(settingsMenuItem);
-        SettingsController settingsController = new SettingsController();
-        settingsMenuItem.addActionListener(settingsController);
-
         mfile.addSeparator();
         JMenuItem quitter = new JMenuItem("Quitter");
         mfile.add(quitter);
         quitter.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
+            }
+        });
+
+        JMenuItem githubMenuItem = new JMenuItem("GitHub Repository");
+        mHelp.add(githubMenuItem);
+        githubMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String githubLink = "https://github.com/vivienlouradour/Il-me-faut-de-la-place-2e-partie";
+                if (Desktop.isDesktopSupported()) {
+                    try {
+                        Desktop.getDesktop().browse(new URI(githubLink));
+                    }
+                    catch (Exception ex){}
+                }
             }
         });
     }

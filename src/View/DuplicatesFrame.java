@@ -2,6 +2,7 @@ package View;
 
 import Model.AppModel;
 import View.Components.JFileTable;
+import acdc.Services.ErrorLogging;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -21,6 +22,7 @@ public class DuplicatesFrame extends JFrame {
      * @param file répertoire à partir duquel chercher les doublons
      */
     public DuplicatesFrame(File file){
+        super("Il me faut de la place - Recherche de doublons");
         AppModel appModel = AppModel.getInstance();
         this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
@@ -28,7 +30,7 @@ public class DuplicatesFrame extends JFrame {
             this.getContentPane().add(new JScrollPane(createPanel()));
         }
         catch (IOException ex){
-            System.err.println(ex.getMessage());
+            ErrorLogging.getInstance().addLog("Erreur recherche doublons : " + ex.getMessage());
         }
         this.setMinimumSize(new Dimension(850,350));
         this.setLocationRelativeTo(null);

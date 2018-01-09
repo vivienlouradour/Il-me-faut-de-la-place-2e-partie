@@ -2,9 +2,15 @@ package Model;
 
 import acdc.Core.FileTree;
 import acdc.Core.Utils.Filter;
+import acdc.Services.Settings;
 import acdc.TreeDataModel.File1;
 
+import javax.swing.*;
 import javax.swing.tree.TreeModel;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Observable;
 
 public class AppModel extends Observable{
@@ -29,7 +35,6 @@ public class AppModel extends Observable{
 
     public void setTree(String rootPath) {
         this.treeModel = this.fileTree.tree(rootPath, this.filter, this.parallelism);
-        System.out.println("AppModel.setTree(" + rootPath + ")");
         this.setChanged();
         this.notifyObservers(Notifications.TreeModelChange);
     }
@@ -58,5 +63,11 @@ public class AppModel extends Observable{
 
     public Filter getFilter() {
         return this.filter;
+    }
+
+    public void deleteFile(Path path) throws IOException{
+        Files.delete(path);
+        this.setChanged();
+        this.notifyObservers(Notifications.FileDeleted);
     }
 }

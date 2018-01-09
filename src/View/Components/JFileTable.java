@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.Enumeration;
 
 public class JFileTable extends JTable {
-    private static String[] entetes = {"Type", "Nom", "Chemin absolu", "Taille", "Dernière modification"};
+    private static String[] entetes = {"Type", "Nom", "Chemin absolu", "Taille (Ko)", "Dernière modification"};
 
     public JFileTable(){
         super();
@@ -30,15 +30,17 @@ public class JFileTable extends JTable {
 
         JPopupMenu popup = new JPopupMenu();
         JMenuItem menuItemCopy = new JMenuItem("Copier la valeur");
+        JMenuItem menuItemOpenExplorer = new JMenuItem("Ouvrir le fichier");
         JMenuItem menuItemDelete = new JMenuItem("Supprimer le fichier");
         menuItemDelete.addActionListener( new JTableMouseController());
         menuItemCopy.addActionListener(new JTableMouseController());
-        popup.add(menuItemDelete);
+        menuItemOpenExplorer.addActionListener((new JTableMouseController()));
         popup.add(menuItemCopy);
+        popup.add(menuItemOpenExplorer);
+        popup.add(menuItemDelete);
         this.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e)
             {
-                System.out.println("pressed");
             }
 
             public void mouseReleased(MouseEvent e)
@@ -63,22 +65,13 @@ public class JFileTable extends JTable {
                 file.isDirectory() ? "Répertoire" : "Fichier",
                 file.getName(),
                 file.getAbsolutePath(),
-                new Long(size),
+                new Double(size / 1024.0),
                 new Date(file.lastModified())
         };
         return line;
     }
 
-    public static Object[] getEmptyLine(){
-        Object[] line = {
-                "",
-                "",
-                "",
-                new Long(0),
-                new Date()
-        };
-        return line;
-    }
+
 
     public void changeData(ArrayList<Object[]> data){
 
@@ -118,9 +111,6 @@ public class JFileTable extends JTable {
         if(data.size() > 0)
             this.getColumnModel().getColumn(4).setCellRenderer(tableCellRenderer);
     }
-
-
-
 
 
 

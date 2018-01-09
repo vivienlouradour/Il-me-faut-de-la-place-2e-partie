@@ -130,6 +130,10 @@ public class FilterFrame extends JFrame {
         return buttonsPanel;
     }
 
+    private JFrame getThis(){
+        return this;
+    }
+
     private class AcceptButtonControl implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -161,6 +165,8 @@ public class FilterFrame extends JFrame {
             //Regex
             appFilter.setPattern(regexTxtField.getText());
 
+            String message = "les modifications apportées prendront effet à partir du prochain scan ou recherche de doublons.";
+            JOptionPane.showMessageDialog(getThis(), message);
             setVisible(false);
             dispose();
         }

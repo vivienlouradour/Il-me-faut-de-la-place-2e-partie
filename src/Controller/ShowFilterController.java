@@ -11,8 +11,9 @@ public class ShowFilterController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         FilterFrame filterFrame = new FilterFrame();
-        filterFrame.setSize(new Dimension(600,800));
-        filterFrame.setMaximumSize(new Dimension(600,800));
+        filterFrame.setSize(new Dimension(600,700));
+        filterFrame.setMaximumSize(new Dimension(600,700));
         filterFrame.setVisible(true);
+        filterFrame.setResizable(false);
     }
 }

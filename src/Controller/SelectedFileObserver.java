@@ -27,23 +27,29 @@ public class SelectedFileObserver implements Observer {
         Notifications notif = (Notifications)arg;
         if(notif == Notifications.SelectedFileChange){
             File1 selectedFile = AppModel.getInstance().getSelectedFile();
-            updateTable(selectedFile);
+            updateTable(selectedFile, null);
         }
     }
 
-    private void updateTable(File1 selectedFile){
+    private void updateTable(File1 selectedFile, String realPath){
         ArrayList<Object[]> data = new ArrayList<>();
         if(selectedFile.isDirectory){
             Enumeration<File1> enumeration = selectedFile.children();
             File1 currentNode;
+            int numSelected = -1;
             while (enumeration.hasMoreElements()){
                 currentNode = enumeration.nextElement();
                 data.add(JFileTable.getLine(new File(currentNode.absolutePath), currentNode.weight));
+                if(currentNode.absolutePath.equals(realPath))
+                    numSelected = data.size() - 1;
+
             }
+            this.jTable.changeData(data);
+            if(numSelected != -1)
+                this.jTable.setRowSelectionInterval(numSelected, numSelected);
         }
         else {
-            data.add(JFileTable.getLine(new File((selectedFile.absolutePath)), selectedFile.weight));
+            updateTable(selectedFile.getParent(), selectedFile.absolutePath);
         }
-        this.jTable.changeData(data);
     }
 }

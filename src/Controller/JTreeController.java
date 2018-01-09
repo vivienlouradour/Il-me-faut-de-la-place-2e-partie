@@ -5,6 +5,7 @@ import Model.Notifications;
 import acdc.TreeDataModel.File1;
 
 import javax.swing.*;
+import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,10 +42,15 @@ public class JTreeController implements ActionListener, Observer {
     @Override
     public void update(Observable o, Object arg) {
         Notifications notif = (Notifications)arg;
-        if(notif == Notifications.TreeModelChange){
-            this.jTree.setModel(AppModel.getInstance().getTree());
-            this.jPanel.revalidate();
-            AppModel.getInstance().setSelectedFile((File1)this.jTree.getModel().getRoot());
+        switch (notif){
+            case TreeModelChange:
+                this.jTree.setModel(AppModel.getInstance().getTree());
+                this.jPanel.revalidate();
+                AppModel.getInstance().setSelectedFile((File1)this.jTree.getModel().getRoot());
+                break;
+            default:
+                break;
         }
+
     }
 }
