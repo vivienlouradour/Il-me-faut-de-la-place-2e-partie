@@ -5,8 +5,6 @@ import Model.Notifications;
 import View.Components.JFileTable;
 import acdc.TreeDataModel.File1;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

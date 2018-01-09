@@ -5,7 +5,6 @@ import View.Components.JFileTable;
 import acdc.Services.ErrorLogging;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;

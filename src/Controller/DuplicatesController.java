@@ -1,6 +1,5 @@
 package Controller;
 
-import Model.AppModel;
 import View.DuplicatesFrame;
 
 import javax.swing.*;
@@ -8,11 +7,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class DuplicatesController implements ActionListener {
     @Override

@@ -5,7 +5,6 @@ import Model.Notifications;
 import acdc.TreeDataModel.File1;
 
 import javax.swing.*;
-import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

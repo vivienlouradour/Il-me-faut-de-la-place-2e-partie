@@ -2,12 +2,9 @@ package Model;
 
 import acdc.Core.FileTree;
 import acdc.Core.Utils.Filter;
-import acdc.Services.Settings;
 import acdc.TreeDataModel.File1;
 
-import javax.swing.*;
 import javax.swing.tree.TreeModel;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

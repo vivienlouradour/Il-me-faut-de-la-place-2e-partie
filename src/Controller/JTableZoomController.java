@@ -5,8 +5,6 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-import java.util.Observer;
 
 public class JTableZoomController implements ActionListener {
     private JTable table;

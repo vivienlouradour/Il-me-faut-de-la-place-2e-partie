@@ -1,14 +1,14 @@
 package View.Components;
 
-import Model.AppModel;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /* ListDemo.java requires no other files. */
 public class JListExtension extends JPanel
