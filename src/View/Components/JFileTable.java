@@ -39,6 +39,17 @@ public class JFileTable extends JTable {
         this.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e)
             {
+                if (e.isPopupTrigger())
+                {
+                    JTable source = (JTable)e.getSource();
+                    int row = source.rowAtPoint( e.getPoint() );
+                    int column = source.columnAtPoint( e.getPoint() );
+
+                    if (! source.isRowSelected(row))
+                        source.changeSelection(row, column, false, false);
+
+                    popup.show(e.getComponent(), e.getX(), e.getY());
+                }
             }
 
             public void mouseReleased(MouseEvent e)
